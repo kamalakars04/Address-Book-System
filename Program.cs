@@ -10,6 +10,8 @@ namespace AddressBookSystem
         void DisplayContactDetails();
         void AddContact();
         public void UpdateContact();
+        void RemoveContact();
+
 
 
     }
@@ -18,6 +20,7 @@ namespace AddressBookSystem
         const string addContact = "add";
         const string updateContact = "update";
         const string searchContact = "search";
+        const string removeContact = "remove";
         
         static void Main(string[] args)
         {
@@ -29,7 +32,7 @@ namespace AddressBookSystem
             while(flag)
             {
 
-                Console.WriteLine("\nType\nAdd - To add a contact \nupdate- To update a contact and \nsearch- To search to get contact deatails");
+                Console.WriteLine("\nType\nAdd - To add a contact \nupdate- To update a contact\nremove - To remove a contact and \nsearch- To search to get contact deatails");
 
                 switch (Console.ReadLine().ToLower())
                 {
@@ -46,6 +49,9 @@ namespace AddressBookSystem
                     case searchContact:
                         
                         addressBook.DisplayContactDetails();
+                        break;
+                    case removeContact:
+                        addressBook.RemoveContact();
                         break;
 
                     default:

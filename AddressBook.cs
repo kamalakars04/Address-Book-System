@@ -15,8 +15,9 @@ namespace AddressBookSystem
         const int UPDATE_ZIP = 6;
         const int UPDATE_PHONE_NUMBER = 7;
         const int UPDATE_EMAIL = 8;
-       // string name = " ";
         
+        // string name = " ";
+
         public void AddContact()
         {
             string firstName;
@@ -74,13 +75,14 @@ namespace AddressBookSystem
             DisplayContactDetails(name, "search");
         }
 
-        private void DisplayContactDetails(string name, string purpose)
+
+        private string SearchByName(string name)
         {
             int numOfConatctsWithNameSearched = 2;
             if (contactList.Count == 0)
             {
                 Console.WriteLine("\nNo contacts saved");
-                
+                return null;
             }
             else
             {
@@ -94,7 +96,7 @@ namespace AddressBookSystem
                         if ((keyValuePair.Key).Contains(name))
                         {
                             numOfConatctsWithNameSearched++; // num of contacts having search string
-                            Console.WriteLine("\nname of contact is {0}",(keyValuePair.Value).firstName+" "+(keyValuePair.Value).lastName);
+                            Console.WriteLine("\nname of contact is {0}", (keyValuePair.Value).firstName + " " + (keyValuePair.Value).lastName);
                         }
 
                     }
@@ -102,10 +104,10 @@ namespace AddressBookSystem
                     if (numOfConatctsWithNameSearched == 0)
                     {
                         Console.WriteLine("\nContact not found");
-                        break;
+                        return null;
                     }
 
-                     
+
                     else
                     {
                         // Getting more accurate search
@@ -114,29 +116,39 @@ namespace AddressBookSystem
                     }
                 }
 
-                // To display details of contact
-                if (contactList.ContainsKey(name))
-                {
-                    numOfConatctsWithNameSearched = 1;
-                    Console.WriteLine("\nname of contact is {0}", name);
-                    Console.WriteLine("{0}-firstname is {1}", numOfConatctsWithNameSearched++, contactList[name].firstName);
-                    Console.WriteLine("{0}-lastname is {1}", numOfConatctsWithNameSearched++, contactList[name].lastName);
-                    Console.WriteLine("{0}-address is {1}", numOfConatctsWithNameSearched++, contactList[name].address);
-                    Console.WriteLine("{0}-city is {1}", numOfConatctsWithNameSearched++, contactList[name].city);
-                    Console.WriteLine("{0}-state is {1}", numOfConatctsWithNameSearched++, contactList[name].state);
-                    Console.WriteLine("{0}-zip is {1}", numOfConatctsWithNameSearched++, contactList[name].zip);
-                    Console.WriteLine("{0}-phoneNumber is {1}", numOfConatctsWithNameSearched++, contactList[name].phoneNumber);
-                    Console.WriteLine("{0}-email is {1}", numOfConatctsWithNameSearched++, contactList[name].email);
-                }
+            }
+            return name;
+        }
+        private void DisplayContactDetails(string name, string purpose)
+        {
+           name= SearchByName(name);
+            // To display details of contact
+            if(name == null)
+                Console.WriteLine("Contact Not Found");
+            else if (contactList.ContainsKey(name))
+            {
+                int serialNum = 1;
+                Console.WriteLine("\nname of contact is {0}", name);
+                Console.WriteLine("{0}-firstname is {1}", serialNum++, contactList[name].firstName);
+                Console.WriteLine("{0}-lastname is {1}", serialNum++, contactList[name].lastName);
+                Console.WriteLine("{0}-address is {1}", serialNum++, contactList[name].address);
+                Console.WriteLine("{0}-city is {1}", serialNum++, contactList[name].city);
+                Console.WriteLine("{0}-state is {1}", serialNum++, contactList[name].state);
+                Console.WriteLine("{0}-zip is {1}", serialNum++, contactList[name].zip);
+                Console.WriteLine("{0}-phoneNumber is {1}", serialNum++, contactList[name].phoneNumber);
+                Console.WriteLine("{0}-email is {1}", serialNum++, contactList[name].email);
             }
 
             if (purpose.ToLower() == "update" && contactList.ContainsKey(name))
                 UpdateContact(name);
-                      
+            if (purpose.ToLower() == "remove" && contactList.ContainsKey(name))
+                RemoveContact(name);
+
         }
 
+       
 
-       public void UpdateContact()
+        public void UpdateContact()
         {
             Console.WriteLine("\nEnter the name of candidate to be updated");
             string name = Console.ReadLine().ToLower();
@@ -188,6 +200,30 @@ namespace AddressBookSystem
             Console.WriteLine("\nUpdate Successful");
 
 
+        }
+
+        public void RemoveContact()
+        {
+            Console.WriteLine("\nEnter the name of contact to be removed");
+            string name = Console.ReadLine().ToLower();
+            DisplayContactDetails(name, "remove");
+            
+        }
+
+        private void RemoveContact(string name)
+        {
+            Console.WriteLine("Press y to confirm delete or any other key to abort");
+            switch (Console.ReadLine().ToLower())
+            {
+                case "y":
+                    contactList.Remove(name);
+                    Console.WriteLine("Contact deleted");
+                    break;
+                default:
+                    Console.WriteLine("Deletion aborted");
+                    break;
+
+            }
         }
     }
 }
