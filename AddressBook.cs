@@ -76,6 +76,8 @@ namespace AddressBookSystem
                 contactList.Add(addNewContact);
                 Console.WriteLine("\nContact Added");
             }
+
+            // Eliminating the exception of duplicate
             catch
             {
                 if ((Console.ReadLine().ToLower() == "y"))
@@ -97,58 +99,6 @@ namespace AddressBookSystem
             DisplayContactDetails(name, "search");
         }
 
-
-        private int SearchByName(string name)
-        {
-            int numOfConatctsWithNameSearched = 0;
-            if (contactList.Count == 0)
-            {
-                Console.WriteLine("\nNo contacts saved");
-                return -1;
-            }
-            else
-            {
-                // Loop to find exact name being searched
-                while (numOfConatctsWithNameSearched == 0)
-                {
-                    int numOfContactsSearched = 0;
-
-                    //Search if Contacts have the given string in name
-                    foreach (ContactDetails contact in contactList)
-                    {
-                        numOfContactsSearched++; 
-
-                        // If contact name matches exactly then it returns the index of that contact
-                        if ((contact.firstName +" "+ contact.lastName).Equals(name))
-                            return contactList.IndexOf(contact);
-
-                        //If a part of contact name matches then we would ask them to enter accurately
-                        else if ((contact.firstName +" " +contact.lastName).Contains(name))
-                        {
-                            numOfConatctsWithNameSearched++; // num of contacts having search string
-                            Console.WriteLine("\nname of contact is {0}", contact.firstName + " " + contact.lastName);
-                        }
-
-                        //If string is not part of any name then exit
-                        else
-                            return -1;
-
-                        if (numOfContactsSearched == contactList.Count() && numOfConatctsWithNameSearched > 0)
-                        {
-                            Console.WriteLine("\nInput the contact name as firstName lastName\n or E to exit");
-                            name = Console.ReadLine().ToLower();
-                            if (name.ToLower() == "e")
-                                return -1;
-                            numOfConatctsWithNameSearched = 0;
-                        }
-                    }
-                }
-
-            }
-            return 0;
-        }
-
-
         private void DisplayContactDetails(string name, string purpose)
         {
             // Get the index number of required contact
@@ -160,16 +110,16 @@ namespace AddressBookSystem
                 Console.WriteLine("Contact Not Found");
             else
             {
-                int serialNum = 1;
+                int rowNum = 1;
                 Console.WriteLine("\nname of contact is {0}", name);
-                Console.WriteLine("{0}-firstname is {1}", serialNum++, contactList[contactSerialNum].firstName);
-                Console.WriteLine("{0}-lastname is {1}", serialNum++, contactList[contactSerialNum].lastName);
-                Console.WriteLine("{0}-address is {1}", serialNum++, contactList[contactSerialNum].address);
-                Console.WriteLine("{0}-city is {1}", serialNum++, contactList[contactSerialNum].city);
-                Console.WriteLine("{0}-state is {1}", serialNum++, contactList[contactSerialNum].state);
-                Console.WriteLine("{0}-zip is {1}", serialNum++, contactList[contactSerialNum].zip);
-                Console.WriteLine("{0}-phoneNumber is {1}", serialNum++, contactList[contactSerialNum].phoneNumber);
-                Console.WriteLine("{0}-email is {1}", serialNum++, contactList[contactSerialNum].email);
+                Console.WriteLine("{0}-firstname is {1}", rowNum++, contactList[contactSerialNum].firstName);
+                Console.WriteLine("{0}-lastname is {1}", rowNum++, contactList[contactSerialNum].lastName);
+                Console.WriteLine("{0}-address is {1}", rowNum++, contactList[contactSerialNum].address);
+                Console.WriteLine("{0}-city is {1}", rowNum++, contactList[contactSerialNum].city);
+                Console.WriteLine("{0}-state is {1}", rowNum++, contactList[contactSerialNum].state);
+                Console.WriteLine("{0}-zip is {1}", rowNum++, contactList[contactSerialNum].zip);
+                Console.WriteLine("{0}-phoneNumber is {1}", rowNum++, contactList[contactSerialNum].phoneNumber);
+                Console.WriteLine("{0}-email is {1}", rowNum++, contactList[contactSerialNum].email);
 
                 if (purpose.ToLower() == "update")
                     UpdateContact(contactSerialNum);
@@ -179,8 +129,7 @@ namespace AddressBookSystem
 
         }
 
-       
-
+      
         public void UpdateContact()
         {
             Console.WriteLine("\nEnter the name of candidate to be updated");
@@ -205,7 +154,7 @@ namespace AddressBookSystem
             }
             
 
-            //Gegting the new value of attribute
+            //Getting the new value of attribute
             if(IF_INVALID_ENTRY == 0)
             Console.WriteLine("\nEnter the new value to be entered");
             string newValue = Console.ReadLine();
@@ -270,6 +219,56 @@ namespace AddressBookSystem
                     break;
 
             }
+        }
+
+        private int SearchByName(string name)
+        {
+            int numOfConatctsWithNameSearched = 0;
+            if (contactList.Count == 0)
+            {
+                Console.WriteLine("\nNo contacts saved");
+                return -1;
+            }
+            else
+            {
+                // Loop to find exact name being searched
+                while (numOfConatctsWithNameSearched == 0)
+                {
+                    int numOfContactsSearched = 0;
+
+                    //Search if Contacts have the given string in name
+                    foreach (ContactDetails contact in contactList)
+                    {
+                        numOfContactsSearched++;
+
+                        // If contact name matches exactly then it returns the index of that contact
+                        if ((contact.firstName + " " + contact.lastName).Equals(name))
+                            return contactList.IndexOf(contact);
+
+                        //If a part of contact name matches then we would ask them to enter accurately
+                        else if ((contact.firstName + " " + contact.lastName).Contains(name))
+                        {
+                            numOfConatctsWithNameSearched++; // num of contacts having search string
+                            Console.WriteLine("\nname of contact is {0}", contact.firstName + " " + contact.lastName);
+                        }
+
+                        //If string is not part of any name then exit
+                        else
+                            return -1;
+
+                        if (numOfContactsSearched == contactList.Count() && numOfConatctsWithNameSearched > 0)
+                        {
+                            Console.WriteLine("\nInput the contact name as firstName lastName\n or E to exit");
+                            name = Console.ReadLine().ToLower();
+                            if (name.ToLower() == "e")
+                                return -1;
+                            numOfConatctsWithNameSearched = 0;
+                        }
+                    }
+                }
+
+            }
+            return 0;
         }
     }
 }
