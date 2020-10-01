@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AddressBookSystem
 {
-    class AddressBook
+    class AddressBook : IAddressBook
     {
         public static Dictionary<string, ContactDetails> contactList = new Dictionary<string, ContactDetails>();
         const int UPDATE_FIRST_NAME = 1;
