@@ -26,13 +26,13 @@ namespace AddressBookSystem
         {
             bool flag=true;
             
-            Console.WriteLine("Welcome to Address Book Program");
+            Console.WriteLine("Welcome To Address Book Program");
 
             AddressBook addressBook = new AddressBook();
             while(flag)
             {
 
-                Console.WriteLine("\nType\nAdd - To add a contact \nupdate- To update a contact\nremove - To remove a contact and \nsearch- To search to get contact deatails");
+                Console.WriteLine("\nType\n\nAdd - To add a contact \nUpdate- To update a contact\nRemove - To remove a contact and \nSearch- To search to get contact deatails\n");
 
                 switch (Console.ReadLine().ToLower())
                 {
