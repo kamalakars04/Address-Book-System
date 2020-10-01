@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AddressBookSystem
 {
@@ -12,8 +13,6 @@ namespace AddressBookSystem
         public void UpdateContact();
         void RemoveContact();
 
-
-
     }
     class Program
     {
@@ -22,44 +21,52 @@ namespace AddressBookSystem
         const string searchContact = "search";
         const string removeContact = "remove";
         
+
+
         static void Main(string[] args)
         {
-            bool flag=true;
+            
             
             Console.WriteLine("Welcome To Address Book Program");
-
-            AddressBook addressBook = new AddressBook();
-            while(flag)
+            AddressBookDetails addressBookDetails = new AddressBookDetails();
+            bool flag = true;
+            while (flag)
             {
-
-                Console.WriteLine("\nType\n\nAdd - To add a contact \nUpdate- To update a contact\nRemove - To remove a contact and \nSearch- To search to get contact deatails\n");
-
-                switch (Console.ReadLine().ToLower())
+                AddressBook addressBook = addressBookDetails.GetAddressBook();
+                if (addressBook != null)
                 {
-                    case addContact:
+                    Console.WriteLine("\nSelect from below to work on Address book {0}", addressBook.nameOfAddressBook);
+                    Console.WriteLine("\nType\n\nAdd - To add a contact \nUpdate- To update a contact\nRemove - To remove a contact and \nSearch- To search to get contact deatails\n");
 
-                        addressBook.AddContact();
-                        break;
+                    switch (Console.ReadLine().ToLower())
+                    {
+                        case addContact:
 
-                    case updateContact:
-                        
-                        addressBook.UpdateContact();
-                        break;
+                            addressBook.AddContact();
+                            break;
 
-                    case searchContact:
-                        
-                        addressBook.DisplayContactDetails();
-                        break;
-                    case removeContact:
-                        addressBook.RemoveContact();
-                        break;
+                        case updateContact:
 
-                    default:
-                        flag = false;
-                        Console.WriteLine("Invalid option. Try again");
-                        Console.WriteLine("Enter any key to exit");
-                        break;
+                            addressBook.UpdateContact();
+                            break;
+
+                        case searchContact:
+
+                            addressBook.DisplayContactDetails();
+                            break;
+                        case removeContact:
+                            addressBook.RemoveContact();
+                            break;
+
+                        default:
+                            flag = false;
+                            Console.WriteLine("\nInvalid option. Try again");
+                            Console.WriteLine("\nEnter any key to exit");
+                            break;
+                    }
                 }
+                else
+                    Console.WriteLine("\nAddress Book not found");
 
             }
 

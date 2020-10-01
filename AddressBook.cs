@@ -16,9 +16,13 @@ namespace AddressBookSystem
         const int UPDATE_ZIP = 6;
         const int UPDATE_PHONE_NUMBER = 7;
         const int UPDATE_EMAIL = 8;
-
+        int IF_INVALID_ENTRY = 0;
+        public string nameOfAddressBook = " ";
         // string name = " ";
-
+        public AddressBook(string name)
+        {
+             nameOfAddressBook = name;
+        }
         public void AddContact()
         {
             string firstName;
@@ -60,7 +64,7 @@ namespace AddressBookSystem
             //Checking for duplicates
             try
             {
-                bool createCopy = false;
+               
                 foreach (ContactDetails contact in contactList)
                 {
                     if ((contact.firstName + " " + contact.lastName).Equals(firstName + " " + lastName))
@@ -129,10 +133,12 @@ namespace AddressBookSystem
                         else
                             return -1;
 
-                        if (numOfContactsSearched == contactList.Count() && numOfConatctsWithNameSearched >0)
+                        if (numOfContactsSearched == contactList.Count() && numOfConatctsWithNameSearched > 0)
                         {
-                            Console.WriteLine("\nInput the contact name as firstName lastName\n");
+                            Console.WriteLine("\nInput the contact name as firstName lastName\n or E to exit");
                             name = Console.ReadLine().ToLower();
+                            if (name.ToLower() == "e")
+                                return -1;
                             numOfConatctsWithNameSearched = 0;
                         }
                     }
@@ -185,11 +191,22 @@ namespace AddressBookSystem
 
         public void UpdateContact(int contactSerialNum)
         {
+            int updateAttributeNum=0;
             //Getting the attribute to be updated
             Console.WriteLine("\nEnter the row number attribute to be updated");
-            int updateAttributeNum = Convert.ToInt32(Console.ReadLine());
+            try
+            {
+                 updateAttributeNum = Convert.ToInt32(Console.ReadLine());
+            }
+            catch
+            {
+                IF_INVALID_ENTRY = 1;
+               
+            }
+            
 
             //Gegting the new value of attribute
+            if(IF_INVALID_ENTRY == 0)
             Console.WriteLine("\nEnter the new value to be entered");
             string newValue = Console.ReadLine();
 
@@ -222,8 +239,10 @@ namespace AddressBookSystem
                     break;
                 default:
                     Console.WriteLine("Invalid Entry");
+                    IF_INVALID_ENTRY = 1;
                     break;
             }
+            if(IF_INVALID_ENTRY == 0)
             Console.WriteLine("\nUpdate Successful");
 
 
