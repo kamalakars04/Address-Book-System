@@ -25,28 +25,33 @@ namespace AddressBookSystem
 
             AddressBookDetails addressBookDetails = new AddressBookDetails();
 
-            Console.WriteLine("\nType\nAdd - To add or access address book\nview - To view all names of address books\nDelete - To delete Address book\nE - To exit");
-           
-            switch(Console.ReadLine().ToLower())
+            bool flag = true;
+            while(flag)
             {
-                case TO_ADD_OR_ACCESS:
-                    addressBookDetails.AddOrAccessAddressBook();
-                    break;
+                Console.WriteLine("\nType to select address book\nAdd - To add or access address book\nview - To view all names of address books\nDelete - To delete Address book\nE - To exit");
 
-                case TO_VIEW_ALL_ADDRESSBOOKS:
-                    addressBookDetails.ViewAllAddressBooks();
-                    break;
+                switch (Console.ReadLine().ToLower())
+                {
+                    case TO_ADD_OR_ACCESS:
+                        addressBookDetails.AddOrAccessAddressBook();
+                        break;
 
-                case TO_DELETE_ADDRESS_BOOK:
-                    addressBookDetails.DeleteAddressBook();
-                    break;
+                    case TO_VIEW_ALL_ADDRESSBOOKS:
+                        addressBookDetails.ViewAllAddressBooks();
+                        break;
 
-                default:
-                    break;
+                    case TO_DELETE_ADDRESS_BOOK:
+                        addressBookDetails.DeleteAddressBook();
+                        break;
 
+                    default:
+                        flag = false;
+                        break;
+
+                }
             }
+            
 
-            Console.ReadKey();
         }
     }
 }

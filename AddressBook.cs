@@ -94,14 +94,21 @@ namespace AddressBookSystem
 
         public void DisplayContactDetails()
         {
-            Console.WriteLine("\nEnter the name of candidate to get Details");
-            string name = Console.ReadLine().ToLower();
-            DisplayContactDetails(name, "search");
+            if (contactList.Count() == 0)
+                Console.WriteLine("No saved contacts");
+            else
+            {
+                Console.WriteLine("\nEnter the name of candidate to get Details");
+                string name = Console.ReadLine().ToLower();
+                DisplayContactDetails(name, "search");
+            }
+
         }
 
         private void DisplayContactDetails(string name, string purpose)
         {
             // Get the index number of required contact
+
            int contactSerialNum = SearchByName(name);
             
             
@@ -132,93 +139,108 @@ namespace AddressBookSystem
       
         public void UpdateContact()
         {
-            Console.WriteLine("\nEnter the name of candidate to be updated");
-            string name = Console.ReadLine().ToLower();
-            DisplayContactDetails(name, "update");
+            if (contactList.Count() == 0)
+                Console.WriteLine("No saved contacts");
+            else
+            {
+                Console.WriteLine("\nEnter the name of candidate to be updated");
+                string name = Console.ReadLine().ToLower();
+                DisplayContactDetails(name, "update");
+            }
         }
 
 
         public void UpdateContact(int contactSerialNum)
         {
-            int updateAttributeNum=0;
-            //Getting the attribute to be updated
-            Console.WriteLine("\nEnter the row number attribute to be updated");
-            try
+            if(contactSerialNum<0)
+                Console.WriteLine("Contact Not Saved");
+            else
             {
-                 updateAttributeNum = Convert.ToInt32(Console.ReadLine());
-            }
-            catch
-            {
-                IF_INVALID_ENTRY = 1;
+                int updateAttributeNum = 0;
+                //Getting the attribute to be updated
+                Console.WriteLine("\nEnter the row number attribute to be updated");
+                
+                updateAttributeNum = Convert.ToInt32(Console.ReadLine());
+             
+
+                //Getting the new value of attribute
                
-            }
-            
+                Console.WriteLine("\nEnter the new value to be entered");
+                string newValue = Console.ReadLine();
 
-            //Getting the new value of attribute
-            if(IF_INVALID_ENTRY == 0)
-            Console.WriteLine("\nEnter the new value to be entered");
-            string newValue = Console.ReadLine();
+                //Updating selected attribute with selected value
+                switch (updateAttributeNum)
+                {
+                    case UPDATE_FIRST_NAME:
+                        contactList[contactSerialNum].firstName = newValue;
+                        break;
+                    case UPDATE_LAST_NAME:
+                        contactList[contactSerialNum].lastName = newValue;
+                        break;
+                    case UPDATE_ADDRESS:
+                        contactList[contactSerialNum].address = newValue;
+                        break;
+                    case UPDATE_CITY:
+                        contactList[contactSerialNum].city = newValue;
+                        break;
+                    case UPDATE_STATE:
+                        contactList[contactSerialNum].state = newValue;
+                        break;
+                    case UPDATE_ZIP:
+                        contactList[contactSerialNum].zip = newValue;
+                        break;
+                    case UPDATE_PHONE_NUMBER:
+                        contactList[contactSerialNum].phoneNumber = newValue;
+                        break;
+                    case UPDATE_EMAIL:
+                        contactList[contactSerialNum].email = newValue;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid Entry");
+                        IF_INVALID_ENTRY = 1;
+                        break;
+                }
+                if (IF_INVALID_ENTRY == 0)
+                    Console.WriteLine("\nUpdate Successful");
 
-            //Updating selected attribute with selected value
-            switch(updateAttributeNum)
-            {
-                case UPDATE_FIRST_NAME:
-                    contactList[contactSerialNum].firstName = newValue;
-                    break;
-                case UPDATE_LAST_NAME:
-                    contactList[contactSerialNum].lastName = newValue;
-                    break;
-                case UPDATE_ADDRESS:
-                    contactList[contactSerialNum].address = newValue;
-                    break;
-                case UPDATE_CITY:
-                    contactList[contactSerialNum].city = newValue;
-                    break;
-                case UPDATE_STATE:
-                    contactList[contactSerialNum].state = newValue;
-                    break;
-                case UPDATE_ZIP:
-                    contactList[contactSerialNum].zip = newValue;
-                    break;
-                case UPDATE_PHONE_NUMBER:
-                    contactList[contactSerialNum].phoneNumber = newValue;
-                    break;
-                case UPDATE_EMAIL:
-                    contactList[contactSerialNum].email = newValue;
-                    break;
-                default:
-                    Console.WriteLine("Invalid Entry");
-                    IF_INVALID_ENTRY = 1;
-                    break;
             }
-            if(IF_INVALID_ENTRY == 0)
-            Console.WriteLine("\nUpdate Successful");
 
 
         }
 
         public void RemoveContact()
         {
-            Console.WriteLine("\nEnter the name of contact to be removed");
-            string name = Console.ReadLine().ToLower();
-            DisplayContactDetails(name, "remove");
+            if (contactList.Count() == 0)
+                Console.WriteLine("\nNo saved contacts");
+            else
+            {
+                Console.WriteLine("\nEnter the name of contact to be removed");
+                string name = Console.ReadLine().ToLower();
+                DisplayContactDetails(name, "remove");
+            }
+           
             
         }
 
         private void RemoveContact(int contactSerialNum)
         {
-            Console.WriteLine("Press y to confirm delete or any other key to abort");
-            switch (Console.ReadLine().ToLower())
+            if(contactSerialNum<0)
+                Console.WriteLine("Contact Not found");
+            else
             {
-                case "y":
-                    contactList.RemoveAt(contactSerialNum);
-                    Console.WriteLine("Contact deleted");
-                    break;
-                default:
-                    Console.WriteLine("Deletion aborted");
-                    break;
-
+                Console.WriteLine("Press y to confirm delete or any other key to abort");
+                switch (Console.ReadLine().ToLower())
+                {
+                    case "y":
+                        contactList.RemoveAt(contactSerialNum);
+                        Console.WriteLine("Contact deleted");
+                        break;
+                    default:
+                        Console.WriteLine("Deletion aborted");
+                        break;
+                }
             }
+           
         }
 
         private int SearchByName(string name)
@@ -269,6 +291,29 @@ namespace AddressBookSystem
 
             }
             return 0;
+        }
+
+        public void GetAllContacts()
+        {
+            if(contactList.Count() ==0)
+                Console.WriteLine("\nNo saved contacts");
+            else
+            {
+                foreach (ContactDetails contact in contactList)
+                {
+                    int rowNum = 1;
+                    Console.WriteLine("\nname of contact is {0}", contact.firstName + " " + contact.lastName);
+                    Console.WriteLine("{0}-firstname is {1}", rowNum++, contact.firstName);
+                    Console.WriteLine("{0}-lastname is {1}", rowNum++, contact.lastName);
+                    Console.WriteLine("{0}-address is {1}", rowNum++, contact.address);
+                    Console.WriteLine("{0}-city is {1}", rowNum++, contact.city);
+                    Console.WriteLine("{0}-state is {1}", rowNum++, contact.state);
+                    Console.WriteLine("{0}-zip is {1}", rowNum++, contact.zip);
+                    Console.WriteLine("{0}-phoneNumber is {1}", rowNum++, contact.phoneNumber);
+                    Console.WriteLine("{0}-email is {1}", rowNum++, contact.email);
+                }
+            }
+            
         }
     }
 }
