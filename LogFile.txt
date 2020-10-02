@@ -1,1 +1,10 @@
-﻿
+﻿2020-10-02 14:51:58.0640 WARN AddressBook home not found
+2020-10-02 14:51:59.8690 INFO New address book created with name : home
+2020-10-02 14:52:06.7213 INFO User created a new contact
+2020-10-02 14:52:17.7031 ERROR User tried to create a duplicate of contact
+2020-10-02 14:52:32.3689 INFO User created a new contact
+2020-10-02 14:52:45.0163 INFO User tried to update contactka
+2020-10-02 14:52:45.0272 ERROR Multiple contacts exists with given name
+2020-10-02 14:52:45.0395 ERROR Multiple contacts exists with given name
+2020-10-02 14:52:53.2875 ERROR Multiple contacts exists with given name
+2020-10-02 14:52:53.2875 ERROR Multiple contacts exists with given name

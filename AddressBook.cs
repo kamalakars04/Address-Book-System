@@ -112,8 +112,6 @@ namespace AddressBookSystem
 
         }
 
-       
-      
         public void UpdateContact()
         {
             if (contactList.Count() == 0)
@@ -190,7 +188,6 @@ namespace AddressBookSystem
  
         }
 
-        
         public void RemoveContact()
         {
             if (contactList.Count() == 0)
@@ -237,59 +234,9 @@ namespace AddressBookSystem
             {
                 logger.Info("User viewd all contacts");
                 foreach (ContactDetails contact in contactList)
-                    toString(contactList.IndexOf(contact));
+                toString(contactList.IndexOf(contact));
             }
 
-        }
-
-        private int SearchByName(string name)
-        {
-            int numOfConatctsWithNameSearched = 0;
-            
-            if (contactList.Count == 0)
-                return -1;
-            
-            else
-            {
-                // Loop to find exact name being searched
-                while (numOfConatctsWithNameSearched == 0)
-                {
-                    int numOfContactsSearched = 0;
-
-                    //Search if Contacts have the given string in name
-                    foreach (ContactDetails contact in contactList)
-                    {
-                        numOfContactsSearched++;
-
-                        // If contact name matches exactly then it returns the index of that contact
-                        if ((contact.firstName + " " + contact.lastName).Equals(name))
-                            return contactList.IndexOf(contact);
-
-                        //If a part of contact name matches then we would ask them to enter accurately
-                        else if ((contact.firstName + " " + contact.lastName).Contains(name))
-                        {
-                            logger.Error("Multiple contacts exists with given name");
-                            numOfConatctsWithNameSearched++; // num of contacts having search string
-                            Console.WriteLine("\nname of contact is {0}", contact.firstName + " " + contact.lastName);
-                        }
-
-                        //If string is not part of any name then exit
-                        else
-                            return -1;
-
-                        if (numOfContactsSearched == contactList.Count() && numOfConatctsWithNameSearched > 0)
-                        {
-                            Console.WriteLine("\nInput the contact name as firstName lastName\n or E to exit");
-                            name = Console.ReadLine().ToLower();
-                            if (name.ToLower() == "e")
-                                return -1;
-                            numOfConatctsWithNameSearched = 0;
-                        }
-                    }
-                }
-
-            }
-            return 0;
         }
 
         private void toString(int contactSerialNum)
@@ -313,6 +260,53 @@ namespace AddressBookSystem
                 Console.WriteLine("{0}-email is {1}", rowNum++, contactList[contactSerialNum].email);
             }
            
+        }
+
+        private int SearchByName(string name)
+        {
+            int numOfConatctsWithNameSearched = 0;
+
+            if (contactList.Count == 0)
+                return -1;
+
+            else
+            {
+                int numOfContactsSearched = 0;
+
+                //Search if Contacts have the given string in name
+                foreach (ContactDetails contact in contactList)
+                {
+                    numOfContactsSearched++;
+
+                    // If contact name matches exactly then it returns the index of that contact
+                    if ((contact.firstName + " " + contact.lastName).Equals(name))
+                        return contactList.IndexOf(contact);
+
+                    //If a part of contact name matches then we would ask them to enter accurately
+                    else if ((contact.firstName + " " + contact.lastName).Contains(name))
+                    {
+                        logger.Error("Multiple contacts exists with given name");
+                        numOfConatctsWithNameSearched++; // num of contacts having search string
+                        Console.WriteLine("\nname of contact is {0}", contact.firstName + " " + contact.lastName);
+                    }
+
+                    //If string is not part of any name then exit
+                    else
+                        return -1;
+
+                    if (numOfContactsSearched == contactList.Count() && numOfConatctsWithNameSearched > 0)
+                    {
+                        Console.WriteLine("\nInput the contact name as firstName lastName\n or E to exit");
+                        name = Console.ReadLine().ToLower();
+                        if (name.ToLower() == "e")
+                            return -1;
+                        int serialNumOfContact = SearchByName(name);
+                            return serialNumOfContact;
+                    }
+                }
+
+            }
+            return 0;
         }
     }
 }
