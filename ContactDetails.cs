@@ -17,8 +17,8 @@ namespace AddressBookSystem
         
         public ContactDetails(string firstName, string lastName, string address, string city, string state, string zip, string phoneNumber, string email)
         {
-            this.firstName = firstName;
-            this.lastName = lastName;
+            this.firstName = firstName.ToLower();
+            this.lastName = lastName.ToLower();
             this.address = address;
             this.city = city;
             this.state = state;

@@ -6,6 +6,7 @@ namespace AddressBookSystem
 {
     class AddressBookDetails
     {
+        
         string nameOfAddressBook;
         const string ADD_CONTACT = "add";
         const string UPDATE_CONTACT = "update";
@@ -14,8 +15,6 @@ namespace AddressBookSystem
         const string GET_ALL_CONTACTS = "view";
         public Dictionary<string, AddressBook> addressBookList = new Dictionary<string, AddressBook>();
 
-
-       
 
         private AddressBook GetAddressBook()
         {
@@ -26,6 +25,7 @@ namespace AddressBookSystem
             if (addressBookList.ContainsKey(nameOfAddressBook))
             {
                 Console.WriteLine("\nAddressBook Identified");
+                
                 return addressBookList[nameOfAddressBook];
             } 
 
@@ -41,8 +41,11 @@ namespace AddressBookSystem
                     return addressBookList[nameOfAddressBook];
                 }
                 else
+                {
                     Console.WriteLine("\nAction Aborted");
-                return null;
+                    return null;
+                }
+                    
 
             }
         }
@@ -87,50 +90,60 @@ namespace AddressBookSystem
         {
             AddressBook addressBook = GetAddressBook();
             bool flag = true;
+            if (addressBook == null)
+            {
+                flag = false;
+                Console.WriteLine("Action aborted");
+            }
+                
             while (flag)
             {
-                if (addressBook != null)
+                Console.WriteLine("\nSelect from below to work on Address book {0}", addressBook.nameOfAddressBook);
+                Console.WriteLine("\nType\n\nAdd - To add a contact \nUpdate- To update a contact\nView - To view all contacts\nRemove - To remove a contact and \nSearch- To search to get contact deatails\nE - To exit\n ");
+
+                switch (Console.ReadLine().ToLower())
                 {
-                    Console.WriteLine("\nSelect from below to work on Address book {0}", addressBook.nameOfAddressBook);
-                    Console.WriteLine("\nType\n\nAdd - To add a contact \nUpdate- To update a contact\nView - To view all contacts\nRemove - To remove a contact and \nSearch- To search to get contact deatails\nE - To exit\n ");
+                    case ADD_CONTACT:
 
-                    switch (Console.ReadLine().ToLower())
-                    {
-                        case ADD_CONTACT:
+                        addressBook.AddContact();
+                        break;
 
-                            addressBook.AddContact();
-                            break;
+                    case UPDATE_CONTACT:
 
-                        case UPDATE_CONTACT:
 
-                            addressBook.UpdateContact();
-                            break;
+                        addressBook.UpdateContact();
+                        break;
 
-                        case SEARCH_CONTACT:
+                    case SEARCH_CONTACT:
 
-                            addressBook.DisplayContactDetails();
-                            break;
-                        case REMOVE_CONTACT:
-                            addressBook.RemoveContact();
-                            break;
-                        case GET_ALL_CONTACTS:
-                            addressBook.GetAllContacts();
-                            break;
+                        addressBook.DisplayContactDetails();
+                        break;
 
-                        default:
-                            flag = false;
-                            Console.WriteLine("\nInvalid option. Try again");
-                            continue;
-                    }
-                        Console.WriteLine("\nType y to continue in same address Book or any other key to exit");
-                        if (!(Console.ReadLine().ToLower() == "y"))
+                    case REMOVE_CONTACT:
+
+                        addressBook.RemoveContact();
+                        break;
+
+                    case GET_ALL_CONTACTS:
+
+                        addressBook.GetAllContacts();
+                        break;
+
+                    default:
+
                         flag = false;
-
+                        Console.WriteLine("\nInvalid option. Try again");
+                        continue;
                 }
-                else
-                    Console.WriteLine("\nAddress Book not found");
+
+                Console.WriteLine("\nType y to continue in same address Book or any other key to exit");
+                if (!(Console.ReadLine().ToLower() == "y"))
+                    flag = false;
 
             }
+                
+
+       
         }
 
         
