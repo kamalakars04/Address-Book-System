@@ -5,7 +5,7 @@ using System.Text;
 using NLog;
 namespace AddressBookSystem
 {
-    class AddressBook : IAddressBook
+    class AddressBook 
     {
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
         public List<ContactDetails> contactList = new List<ContactDetails>();

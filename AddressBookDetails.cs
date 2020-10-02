@@ -5,7 +5,7 @@ using NLog;
 
 namespace AddressBookSystem
 {
-    class AddressBookDetails
+    class AddressBookDetails : IAddressBook
     {
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
         string nameOfAddressBook;
