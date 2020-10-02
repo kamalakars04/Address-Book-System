@@ -100,58 +100,54 @@ namespace AddressBookSystem
             bool flag = true;
             if (addressBook == null)
             {
-                flag = false;
                 Console.WriteLine("Action aborted");
+                return;
             }
                 
-            while (flag)
-            {
-                Console.WriteLine("\nSelect from below to work on Address book {0}", addressBook.nameOfAddressBook);
-                Console.WriteLine("\nType\n\nAdd - To add a contact \nUpdate- To update a contact\nView - To view all contacts\nRemove - To remove a contact and \nSearch- To search to get contact deatails\nE - To exit\n ");
+             L1:Console.WriteLine("\nSelect from below to work on Address book {0}", addressBook.nameOfAddressBook);
+             Console.WriteLine("\nType\n\nAdd - To add a contact \nUpdate- To update a contact\nView - To view all contacts\nRemove - To remove a contact and \nSearch- To search to get contact deatails\nE - To exit\n ");
 
-                switch (Console.ReadLine().ToLower())
-                {
-                    case ADD_CONTACT:
+             switch (Console.ReadLine().ToLower())
+             {
+                case ADD_CONTACT:
 
-                        addressBook.AddContact();
-                        break;
+                    addressBook.AddContact();
+                    break;
 
-                    case UPDATE_CONTACT:
+                case UPDATE_CONTACT:
 
+                    addressBook.UpdateContact();
+                    break;
 
-                        addressBook.UpdateContact();
-                        break;
+                case SEARCH_CONTACT:
 
-                    case SEARCH_CONTACT:
+                    addressBook.DisplayContactDetails();
+                    break;
 
-                        addressBook.DisplayContactDetails();
-                        break;
+                case REMOVE_CONTACT:
 
-                    case REMOVE_CONTACT:
+                    addressBook.RemoveContact();
+                    break;
 
-                        addressBook.RemoveContact();
-                        break;
+                case GET_ALL_CONTACTS:
 
-                    case GET_ALL_CONTACTS:
+                    addressBook.GetAllContacts();
+                    break;
 
-                        addressBook.GetAllContacts();
-                        break;
+                default:
 
-                    default:
+                    Console.WriteLine("\nInvalid option. Exiting address book");
+                    return;
+             }
 
-                        flag = false;
-                        Console.WriteLine("\nInvalid option. Exiting address book");
-                        continue;
-                }
-
-                Console.WriteLine("\nType y to continue in same address Book or any other key to exit");
-                if (!(Console.ReadLine().ToLower() == "y"))
-                {
-                    logger.Debug("User exited the address book " + nameOfAddressBook);
-                    flag = false;
-                }
-            }
-
+             Console.WriteLine("\nType y to continue in same address Book or any other key to exit");
+             if (!(Console.ReadLine().ToLower() == "y"))
+             {
+                logger.Debug("User exited the address book " + nameOfAddressBook);
+                return;
+             }
+             else
+                goto L1;
         }
         
     }

@@ -17,24 +17,25 @@ namespace AddressBookSystem
         const int UPDATE_ZIP = 6;
         const int UPDATE_PHONE_NUMBER = 7;
         const int UPDATE_EMAIL = 8;
-        int IF_INVALID_ENTRY = 0;
         int contactSerialNum = 0;
         public string nameOfAddressBook = " ";
+
+        string firstName;
+        string lastName;
+        string address;
+        string city;
+        string state;
+        string zip;
+        string phoneNumber;
+        string email;
         // string name = " ";
         public AddressBook(string name)
         {
              nameOfAddressBook = name;
         }
+
         public void AddContact()
         {
-            string firstName;
-            string lastName;
-            string address;
-            string city;
-            string state;
-            string zip;
-            string phoneNumber;
-            string email;
 
             Console.WriteLine("\nEnter The First Name of Contact");
             firstName = Console.ReadLine();
@@ -60,41 +61,40 @@ namespace AddressBookSystem
             Console.WriteLine("\nEnter The Email of Contact");
             email = Console.ReadLine();
 
-            // Adding contact into address book
-            ContactDetails addNewContact = new ContactDetails(firstName, lastName, address, city, state, zip, phoneNumber, email);
-
             //Checking for duplicates
-            try
+            while(CheckForDuplicates(firstName+" "+lastName))
             {
-               
-                foreach (ContactDetails contact in contactList)
-                {
-                    if ((contact.firstName + " " + contact.lastName).Equals(firstName + " " + lastName))
-                    {
-                        logger.Error("User tried to create a duplicate of contact");
-                        Console.WriteLine("\nThe name of the contact already exits.Press Y to save a copy as {0}1 or any other key to exit", (contact.firstName + " " + contact.lastName));
-                        throw new Exception();
-                    }
-                }
-                contactList.Add(addNewContact);
-                Console.WriteLine("\nContact Added");
-                logger.Info("User created a new contact");
-               
-            }
-
-            // Eliminating the exception of duplicate
-            catch
-            {
+                Console.WriteLine("Type Y to enter new name or any other key to exit");
                 if ((Console.ReadLine().ToLower() == "y"))
                 {
-                    addNewContact.lastName += "1"; 
-                    contactList.Add(addNewContact);
-                    Console.WriteLine("\nContact Added");
-                    logger.Info("User created a new contact");
-
+                    Console.WriteLine("Enter new first name");
+                    firstName = Console.ReadLine();
+                    Console.WriteLine("Enter new last name");
+                    lastName = Console.ReadLine();
                 }
-
+                else
+                    return;
             }
+            
+            ContactDetails addNewContact = new ContactDetails(firstName, lastName, address, city, state, zip, phoneNumber, email);
+            contactList.Add(addNewContact);
+            Console.WriteLine("\nContact Added");
+            logger.Info("User created a new contact");
+
+        }
+ 
+        public bool CheckForDuplicates(string name)
+        {
+            foreach (ContactDetails contact in contactList)
+            {
+                if ((contact.firstName + " " + contact.lastName).Equals(name))
+                {
+                    Console.WriteLine("contact already exists");
+                    logger.Error("User tried to create a duplicate of contact");
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void DisplayContactDetails()
@@ -120,26 +120,31 @@ namespace AddressBookSystem
             {
                 // Input the name to be updated
                 Console.WriteLine("\nEnter the name of candidate to be updated");
-                string name = Console.ReadLine().ToLower();
+                string name = Console.ReadLine();
                 logger.Info("User tried to update contact" + name);
                 //search the name
                 int contactSerialNum = SearchByName(name);
+                //To print details of searched contact
+                toString(contactSerialNum);
 
-                //If name not found
-                if (contactSerialNum < 0)
-                    Console.WriteLine("Contact Not Saved");
-
-                //If name found
-                else
+                if (contactSerialNum >= 0)
                 {
-                    //To print details of searched contact
-                    toString(contactSerialNum);
                     int updateAttributeNum = 0;
 
                     //Getting the attribute to be updated
-                    Console.WriteLine("\nEnter the row number attribute to be updated");
-
-                    updateAttributeNum = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("\nEnter the row number attribute to be updated or 0 to exit");
+                    try
+                    {
+                        updateAttributeNum = Convert.ToInt32(Console.ReadLine());
+                        if (updateAttributeNum == 0)
+                            return;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Invalid entry");
+                        return;
+                    }
+                    
 
                     //Getting the new value of attribute
                     Console.WriteLine("\nEnter the new value to be entered");
@@ -149,11 +154,21 @@ namespace AddressBookSystem
                     switch (updateAttributeNum)
                     {
                         case UPDATE_FIRST_NAME:
-                            contactList[contactSerialNum].firstName = newValue;
+
+                            if (!CheckForDuplicates(newValue + " " + contactList[contactSerialNum].lastName))
+                                contactList[contactSerialNum].firstName = newValue;
+                            else
+                                return;
                             break;
+
                         case UPDATE_LAST_NAME:
-                            contactList[contactSerialNum].lastName = newValue;
+
+                            if (!CheckForDuplicates(contactList[contactSerialNum].firstName + " " + newValue))
+                                contactList[contactSerialNum].lastName = newValue;
+                            else
+                                return;
                             break;
+
                         case UPDATE_ADDRESS:
                             contactList[contactSerialNum].address = newValue;
                             break;
@@ -174,15 +189,12 @@ namespace AddressBookSystem
                             break;
                         default:
                             Console.WriteLine("Invalid Entry");
-                            IF_INVALID_ENTRY = 1;
+                            return;
                             break;
                     }
-                    if (IF_INVALID_ENTRY == 0)
-                    {
-                        logger.Info("User updated contact");
-                        Console.WriteLine("\nUpdate Successful");
-                    }
-
+                    
+                    logger.Info("User updated contact");
+                    Console.WriteLine("\nUpdate Successful");
                 }
             }
  
@@ -264,11 +276,8 @@ namespace AddressBookSystem
 
         private int SearchByName(string name)
         {
-            int numOfConatctsWithNameSearched = 0;
-
             if (contactList.Count == 0)
                 return -1;
-
             else
             {
                 int numOfContactsSearched = 0;
@@ -277,13 +286,14 @@ namespace AddressBookSystem
                 foreach (ContactDetails contact in contactList)
                 {
                     numOfContactsSearched++;
+                    int numOfConatctsWithNameSearched = 0;
 
                     // If contact name matches exactly then it returns the index of that contact
                     if ((contact.firstName + " " + contact.lastName).Equals(name))
                         return contactList.IndexOf(contact);
 
                     //If a part of contact name matches then we would ask them to enter accurately
-                    else if ((contact.firstName + " " + contact.lastName).Contains(name))
+                    if ((contact.firstName + " " + contact.lastName).Contains(name))
                     {
                         logger.Error("Multiple contacts exists with given name");
                         numOfConatctsWithNameSearched++; // num of contacts having search string
@@ -291,22 +301,22 @@ namespace AddressBookSystem
                     }
 
                     //If string is not part of any name then exit
-                    else
+                    if(numOfContactsSearched==contactList.Count() && numOfConatctsWithNameSearched==0)
+                        return -1;
+                }
+                    //Asking to enter name accurately
+                    Console.WriteLine("\nInput the contact name as firstName lastName\n or E to exit");
+                    name = Console.ReadLine();
+
+                    // To exit
+                    if (name.ToLower() == "e")
                         return -1;
 
-                    if (numOfContactsSearched == contactList.Count() && numOfConatctsWithNameSearched > 0)
-                    {
-                        Console.WriteLine("\nInput the contact name as firstName lastName\n or E to exit");
-                        name = Console.ReadLine().ToLower();
-                        if (name.ToLower() == "e")
-                            return -1;
-                        int serialNumOfContact = SearchByName(name);
-                            return serialNumOfContact;
-                    }
-                }
-
+                    //To continue search with new name
+                    int serialNumOfContact = SearchByName(name);
+                        return serialNumOfContact;
             }
-            return 0;
+            
         }
     }
 }
