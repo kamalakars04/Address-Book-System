@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NLog;
 
 namespace AddressBookSystem
 {
     class AddressBookDetails
     {
-        
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
         string nameOfAddressBook;
         const string ADD_CONTACT = "add";
         const string UPDATE_CONTACT = "update";
@@ -21,28 +22,33 @@ namespace AddressBookSystem
             Console.WriteLine("\nEnter name of Address Book to be accessed or to be added");
             nameOfAddressBook = Console.ReadLine();
 
+            
+
             //search for address book in dictionary
             if (addressBookList.ContainsKey(nameOfAddressBook))
             {
                 Console.WriteLine("\nAddressBook Identified");
-                
+                logger.Info("Address book " + nameOfAddressBook + " is accessed by user");
                 return addressBookList[nameOfAddressBook];
             } 
 
             //Offer to create a address book if not found in dictionary
             else
             {
+                logger.Warn("AddressBook " + nameOfAddressBook + " not found");
                 Console.WriteLine("\nAddress book not found. Type y to create a new address book or E to abort");
                 if ((Console.ReadLine().ToLower()) == "y")
                 {
                     AddressBook addressBook = new AddressBook(nameOfAddressBook);
                     addressBookList.Add(nameOfAddressBook, addressBook);
                     Console.WriteLine("\nNew AddressBook Created");
+                    logger.Info("New address book created with name : " + nameOfAddressBook);
                     return addressBookList[nameOfAddressBook];
                 }
                 else
                 {
                     Console.WriteLine("\nAction Aborted");
+                    logger.Info("User aborted the operation to create new Address book with name : " + nameOfAddressBook);
                     return null;
                 }
                     
@@ -63,6 +69,7 @@ namespace AddressBookSystem
                 {
                     addressBookList.Remove(Console.ReadLine());
                     Console.WriteLine("Address book deleted successfully");
+                    logger.Info("User deleted the AddressBook " + nameOfAddressBook);
                 }
                 catch
                 {
@@ -82,6 +89,7 @@ namespace AddressBookSystem
                 Console.WriteLine("\nThe namesof address books available are :");
                 foreach (KeyValuePair<string, AddressBook> keyValuePair in addressBookList)
                     Console.WriteLine(keyValuePair.Key);
+                logger.Info("User viewd all AddressBook names");
             }
             
         }
@@ -132,14 +140,16 @@ namespace AddressBookSystem
                     default:
 
                         flag = false;
-                        Console.WriteLine("\nInvalid option. Try again");
+                        Console.WriteLine("\nInvalid option. Exiting address book");
                         continue;
                 }
 
                 Console.WriteLine("\nType y to continue in same address Book or any other key to exit");
                 if (!(Console.ReadLine().ToLower() == "y"))
+                {
+                    logger.Debug("User exited the address book " + nameOfAddressBook);
                     flag = false;
-
+                }
             }
                 
 

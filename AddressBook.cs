@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using NLog;
 namespace AddressBookSystem
 {
     class AddressBook : IAddressBook
     {
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
         public List<ContactDetails> contactList = new List<ContactDetails>();
         const int UPDATE_FIRST_NAME = 1;
         const int UPDATE_LAST_NAME = 2;
@@ -70,12 +71,15 @@ namespace AddressBookSystem
                 {
                     if ((contact.firstName + " " + contact.lastName).Equals(firstName + " " + lastName))
                     {
+                        logger.Error("User tried to create a duplicate of contact");
                         Console.WriteLine("\nThe name of the contact already exits.Press Y to save a copy as {0}1 or any other key to exit", (contact.firstName + " " + contact.lastName));
                         throw new Exception();
                     }
                 }
                 contactList.Add(addNewContact);
                 Console.WriteLine("\nContact Added");
+                logger.Info("User created a new contact");
+               
             }
 
             // Eliminating the exception of duplicate
@@ -86,6 +90,7 @@ namespace AddressBookSystem
                     addNewContact.lastName += "1"; 
                     contactList.Add(addNewContact);
                     Console.WriteLine("\nContact Added");
+                    logger.Info("User created a new contact");
 
                 }
 
@@ -100,6 +105,7 @@ namespace AddressBookSystem
             {
                 Console.WriteLine("\nEnter the name of candidate to get Details");
                 string name = Console.ReadLine().ToLower();
+                logger.Info("User searched for a contact "+ name);
                 contactSerialNum = SearchByName(name);
                 toString(contactSerialNum);
             }
@@ -117,7 +123,7 @@ namespace AddressBookSystem
                 // Input the name to be updated
                 Console.WriteLine("\nEnter the name of candidate to be updated");
                 string name = Console.ReadLine().ToLower();
-
+                logger.Info("User tried to update contact" + name);
                 //search the name
                 int contactSerialNum = SearchByName(name);
 
@@ -174,7 +180,10 @@ namespace AddressBookSystem
                             break;
                     }
                     if (IF_INVALID_ENTRY == 0)
+                    {
+                        logger.Info("User updated contact");
                         Console.WriteLine("\nUpdate Successful");
+                    }
 
                 }
             }
@@ -193,6 +202,7 @@ namespace AddressBookSystem
                 Console.WriteLine("\nEnter the name of contact to be removed");
                 string name = Console.ReadLine().ToLower();
 
+                logger.Info("User requested to remove contact " + name);
                 //Search for the contact
                 int contactSerialNum = SearchByName(name);
 
@@ -208,9 +218,11 @@ namespace AddressBookSystem
                         case "y":
                             contactList.RemoveAt(contactSerialNum);
                             Console.WriteLine("Contact deleted");
+                            logger.Info("User removed the contact");
                             break;
                         default:
                             Console.WriteLine("Deletion aborted");
+                            logger.Info("User aborted the process");
                             break;
                     }
                 }
@@ -223,6 +235,7 @@ namespace AddressBookSystem
                 Console.WriteLine("\nNo saved contacts");
             else
             {
+                logger.Info("User viewd all contacts");
                 foreach (ContactDetails contact in contactList)
                     toString(contactList.IndexOf(contact));
             }
@@ -255,6 +268,7 @@ namespace AddressBookSystem
                         //If a part of contact name matches then we would ask them to enter accurately
                         else if ((contact.firstName + " " + contact.lastName).Contains(name))
                         {
+                            logger.Error("Multiple contacts exists with given name");
                             numOfConatctsWithNameSearched++; // num of contacts having search string
                             Console.WriteLine("\nname of contact is {0}", contact.firstName + " " + contact.lastName);
                         }
@@ -281,7 +295,10 @@ namespace AddressBookSystem
         private void toString(int contactSerialNum)
         {
             if (contactSerialNum < 0)
+            {
                 Console.WriteLine("Contact Not found");
+                logger.Error("Contact not found");
+            }
             else
             {
                 int rowNum = 1;
