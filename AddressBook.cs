@@ -7,6 +7,7 @@ namespace AddressBookSystem
 {
     class AddressBook 
     {
+        //Constants
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
         public List<ContactDetails> contactList = new List<ContactDetails>();
         const int UPDATE_FIRST_NAME = 1;
@@ -19,7 +20,7 @@ namespace AddressBookSystem
         const int UPDATE_EMAIL = 8;
         int contactSerialNum = 0;
         public string nameOfAddressBook = " ";
-
+        //Variables
         string firstName;
         string lastName;
         string address;
@@ -28,12 +29,16 @@ namespace AddressBookSystem
         string zip;
         string phoneNumber;
         string email;
-        // string name = " ";
+       
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
         public AddressBook(string name)
         {
              nameOfAddressBook = name;
         }
-
+        
         public void AddContact()
         {
 

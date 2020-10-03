@@ -4,3 +4,7 @@
 2020-10-02 22:45:52.6079 INFO Address book home is accessed by user
 2020-10-02 22:46:07.2007 INFO User created a new contact
 2020-10-02 22:46:14.7079 DEBUG User exited the address book home
+2020-10-03 10:59:07.7536 WARN AddressBook home not found
+2020-10-03 10:59:14.3853 INFO New address book created with name : home
+2020-10-03 10:59:57.4318 INFO User created a new contact
+2020-10-03 11:00:18.8818 ERROR User tried to create a duplicate of contact
